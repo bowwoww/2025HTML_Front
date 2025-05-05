@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="now_time"></div>
+    <div id="now_X">1</div>
+    <div id="now_Y">2</div>
+    <script>
+        var y=0,mon=0,d=0,h=0,m=0,s=0,time=0;
+
+        function getTimeFormat(n, length) {
+            return "0".repeat(length - n.toString().length) + n;
+        }
+        function getTime(){
+            let now = new Date();
+            y = getTimeFormat(now.getFullYear(),4);
+            mon = getTimeFormat(now.getMonth() + 1,2);
+            d = getTimeFormat(now.getDate(),2);
+            h = getTimeFormat(now.getHours(),2);
+            m = getTimeFormat(now.getMinutes(),2);
+            s = getTimeFormat(now.getSeconds(),2);
+            time = `${y}-${mon}-${d} ${h}:${m}:${s}`;
+            return time;
+        }
+        function updateTime() {
+            document.getElementById("now_time").innerHTML = getTime();
+        }
+        
+        document.addEventListener("DOMContentLoaded", function () {
+            document.addEventListener('mousemove', function (event) {
+                document.getElementById("now_X").innerHTML = event.clientX;
+                document.getElementById("now_Y").innerHTML = event.clientY;
+            });
+            setInterval(updateTime, 1000);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <input type="button" id="btn_showList" value="click to show list"/>
+        <input type="date" name="" id="input_data">
+        <input type="text" name="" id="input_text" value="1">
+        <input type="button" value="查詢學號為1的成績" id="btn_showScore">
+    </div>
+    <div id="display" style="border: 1px solid;"></div>
+    <script>
+        let students = []; // 用於存放從 JSON 載入的學生資料
+        const ScoreRank = ["丁", "丁", "丁", "丁", "丁", "丁", "丙", "乙", "甲", "優", "優"];
+
+        // 取得學生的分數對應的分級
+        function getStudentRankbyScore(student) {
+            return ScoreRank[parseInt(student.score / 10)]; // 取得分數對應的分級
+        }
+
+        // 取得學生的分數
+        function getStudentScoreById(id) {
+            for (let i = 0; i < students.length; i++) {
+                if (students[i].id == id) {
+                    return students[i].score; // 回傳學生的分數
+                }
+            }
+            return null; // 如果找不到學生，回傳 null
+        }
+
+        // 顯示學生列表
+        function showList() {
+            // 用分數排序學生由高到低排序
+            students.sort((x, y) => y.score - x.score);
+
+            // 取得 display 區域
+            const displayDiv = document.getElementById("display");
+            displayDiv.innerHTML = ""; // 清空 display 區域的內容
+
+            // 迴圈列出學生的學號,姓名,分數,分級
+            for (let i = 0; i < students.length; i++) {
+                const student = students[i];
+                const studentInfo = `學號 :${student.id}, 姓名 :${student.name}, 分數 :${student.score}, 排名 :${getStudentRankbyScore(student)}<br>`;
+                displayDiv.innerHTML += studentInfo; // 將內容新增到 display 區域
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            // 設定日期為今天
+            const dateInput = document.getElementById("input_data");
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, "0"); // 月份補零
+            const dd = String(today.getDate()).padStart(2, "0"); // 日期補零
+            dateInput.value = `${yyyy}-${mm}-${dd}`; // 設定為 YYYY-MM-DD 格式
+
+            // 從 students.json 載入資料
+            fetch("students.json")
+                .then(response => response.json())
+                .then(data => {
+                    students = data; // 將載入的資料存入 students 陣列
+                })
+                .catch(error => console.error("Error loading students.json:", error));
+
+            // 綁定按鈕事件
+            document.getElementById("btn_showList").addEventListener("click", showList);
+            document.getElementById("btn_showScore").addEventListener("click", function () {
+                const now_id = document.getElementById("input_text").value; // 取得學號
+                const displayDiv = document.getElementById("display");
+                const score = getStudentScoreById(now_id);
+                displayDiv.innerHTML = score !== null
+                    ? `${now_id}學號學生成績為${score}`
+                    : `找不到學號為 ${now_id} 的學生`; // 顯示學號對應的成績
+            });
+            document.getElementById("input_text").addEventListener("input", function () {
+                document.getElementById("btn_showScore").value = `查詢學號為 ${this.value} 的分數`; // 即時更新按鈕文字
+            });
+        });
+    </script>
+</body>
+</html>

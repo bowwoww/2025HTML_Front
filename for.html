@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // var n = prompt("費式數列第幾個數?",1);
+        // var a = 1;
+        // var fibonacci = 1;
+        // for(let i=2;i<n;i++){
+        //     let temp = fibonacci;
+        //     fibonacci = fibonacci + a;
+        //     a = temp;
+        // }
+        // document.write("第" + n + "個數為" + fibonacci);
+
+        //列出六組文字列印在畫面上並分別套用h1-h6 tag
+        var msg = "Hello World!";
+        var n = 1;
+    while(n<=6){
+        document.write(`<h${n}>${msg}</h${n}>`); //使用模板字串
+        n++;//增加n的值
+
+    }
+    </script>
+</body>
+</html>

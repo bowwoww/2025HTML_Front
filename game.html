@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小蜜蜂遊戲</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas"></canvas>
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const bee = {
+            x: canvas.width / 2,
+            y: canvas.height / 2,
+            size: 30,
+            dx: 0,
+            dy: 0,
+        };
+
+        function drawBee() {
+            ctx.fillStyle = 'yellow';
+            ctx.beginPath();
+            ctx.arc(bee.x, bee.y, bee.size, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = 'black';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+        }
+
+        function updateBee() {
+            bee.x += bee.dx;
+            bee.y += bee.dy;
+
+            if (bee.x < bee.size || bee.x > canvas.width - bee.size) {
+                bee.dx = -bee.dx;
+            }
+            if (bee.y < bee.size || bee.y > canvas.height - bee.size) {
+                bee.dy = -bee.dy;
+            }
+        }
+
+        function handleKeyDown(event) {
+            const speed = 5;
+            if (event.key === 'ArrowUp') bee.dy = -speed;
+            if (event.key === 'ArrowDown') bee.dy = speed;
+            if (event.key === 'ArrowLeft') bee.dx = -speed;
+            if (event.key === 'ArrowRight') bee.dx = speed;
+        }
+
+        function handleKeyUp(event) {
+            if (['ArrowUp', 'ArrowDown'].includes(event.key)) bee.dy = 0;
+            if (['ArrowLeft', 'ArrowRight'].includes(event.key)) bee.dx = 0;
+        }
+
+        window.addEventListener('keydown', handleKeyDown);
+        window.addEventListener('keyup', handleKeyUp);
+
+        function gameLoop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawBee();
+            updateBee();
+            
+            // requestAnimationFrame(gameLoop);
+            console.log(bee.dx + "   " + bee.dy );
+        }
+
+        gameLoop();
+        setInterval(gameLoop,100);
+    </script>
+</body>
+</html>

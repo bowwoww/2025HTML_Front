@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var score = 0;
+        var msg = "您的成績為";
+        score = prompt("enter a score",0);
+        score = parseInt(score) / 10;
+
+        switch(score){
+            case 10:
+            case 9:
+                msg = msg + "優等";
+                break;
+            case 8:
+                msg = msg + "甲等";
+                break;
+            case 7:
+                msg = msg + "乙等";
+                break;
+            case 6:
+                msg = msg + "丙等";
+                break;
+            case 5:
+            case 4:
+            case 3:
+            case 2:
+            case 1:
+            case 0:
+                msg = msg + "不及格";
+                break;
+            default:
+                msg = "這不是一個數字";
+                break;
+        }
+        
+        document.write(msg);
+    </script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var score = prompt("請輸入分數(0~100):"); // 提示使用者輸入分數
+        score = parseInt(score); // 將輸入的分數轉換為整數
+        switch (parseInt(score/10)){
+            case 10:
+            case 9:
+                console.log("優等"); // 分數在90到100之間
+                break;
+            case 8:
+                console.log("甲等"); // 分數在80到89之間
+                break;
+            case 7:
+                console.log("乙等"); // 分數在70到79之間
+                break;
+            case 6:
+                console.log("丙等"); // 分數在60到69之間
+                break;
+            case 5:
+            case 4:
+            case 3:
+            case 2:
+            case 1:
+            case 0:
+                console.log("丁等"); // 分數在0到59之間
+                break;
+            default:
+                console.log("輸入錯誤"); // 當輸入的分數不在0到100之間
+                break;
+        }
+    </script>
+</body>
+</html>

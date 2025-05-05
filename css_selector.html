@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        table {
+            border: 1px solid black;
+        }
+        th, td {
+            border: 1px solid black;
+            text-align: left;
+        }
+        .low-score {
+            background-color: red;
+        }
+        a:active {
+            color: violet;
+            /* background-color: turquoise; */
+            font-size: 3em;
+        }
+        a:link {
+            color: blue;
+        }
+        a:visited {
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <a href="#3">Test HyperLink</a>
+    <table id="container">
+        <thead>
+            <tr>
+                <td>姓名</td>
+                <td>英文</td>
+                <td>數學</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>大明</td>
+                <td>55</td>
+                <td>77</td>
+            </tr>
+            <tr>
+                <td>曉華</td>
+                <td>68</td>
+                <td>30</td>
+            </tr>
+            <tr>
+                <td>阿輝</td>
+                <td>100</td>
+                <td>66</td>
+            </tr>
+        </tbody>
+    </table>
+    <script>
+        function highlight_Red() {
+            var table = document.getElementById("container");
+            var rows = table.getElementsByTagName("tr");
+            for (var i = 1; i < rows.length; i++) {
+                var cells = rows[i].getElementsByTagName("td");
+                for (var j = 0; j < cells.length; j++) {
+                    if (parseInt(cells[j].innerText) < 60) {
+                        cells[j].setAttribute("class", "low-score");
+                    }
+                }
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            highlight_Red();
+        });
+    </script>
+</body>
+</html>

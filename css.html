@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS 變數範例</title>
+    <style>
+        :root {
+            --big-font-size: 2em;
+            --default-font-size: 1em;
+            --small-font-size: 0.5em;
+            --font-size: 1em;
+        }
+        .showText {
+            font-size: var(--font-size);
+        }
+        .container:has(#bigFont:checked) .showText {
+            --font-size: var(--big-font-size);
+        }
+        .container:has(#smallFont:checked) .showText {
+            --font-size: var(--small-font-size);
+        }
+        .container:has(#defaultFont:checked) .showText {
+            --font-size: var(--default-font-size);
+        }
+        /* #bigFont:checked ~ .showText {
+            --font-size: var(--big-font-size);
+        }
+        #smallFont:checked ~ .showText {
+            --font-size: var(--small-font-size);
+        }
+        #defaultFont:checked ~ .showText {
+            --font-size: var(--default-font-size);
+        } */
+        input[type="radio"]{
+            display: none;
+        }
+
+        label {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 5px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        label:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="showText">這是一段文字</div>
+        <input type="radio" name="font-size" id="bigFont">
+        <input type="radio" name="font-size" id="smallFont">
+        <input type="radio" name="font-size" id="defaultFont" checked>
+        <label for="bigFont">變大字體</label>
+        <label for="smallFont">變小字體</label>
+        <label for="defaultFont">變回預設字體</label>
+
+    </div>
+    <div>
+        <label for="selectFontSize">選擇字體大小</label>
+        <select name="" id="selectFontSize">
+            <option value="2">大</option>
+            <option value="1" selected>中</option>
+            <option value="0.5">小</option>
+        </select>
+    </div>
+
+    <script>
+        function changeFontSize(size) {
+            document.body.style.fontSize = size + 'em';
+        }
+        // 監聽下拉選單的變化
+        document.getElementById('selectFontSize').addEventListener('change', function() {
+            changeFontSize(this.value);
+        });
+    </script>
+</body>
+</html>

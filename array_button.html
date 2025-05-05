@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>建築管理系統</title>
+</head>
+<body>
+    <select id="building_select"></select>
+    <input type="button" value="建造" id="btn_build" />
+    <input type="button" value="升級" id="btn_upgrade" />
+    <input type="button" value="拆除" id="btn_destroy" />
+    <input type="button" value="查詢建築物" id="btn_showBuilding" />
+    <input type="button" value="顯示庫存" id="btn_showStorage" />
+    <input type="button" value="收穫" id="btn_circle">
+    <div id="display"></div>
+    <script>
+        // 資源與建築物資料
+        var energy = 100;
+        var worker = 10;
+        var wood = 1000;
+        var stone = 500;
+        var ownBuildings = []; // 擁有的建築物
+
+        class Building {
+            constructor({
+                name = "未知建築",
+                type = "未知類型",
+                level = 1,
+                maxLevel = 10,
+                description = "無描述",
+                production = {},
+                buildcost = { wood: 0, stone: 0 },
+                buildtime = 0,
+                cost = { energy: 0 },
+                crew = { worker: 0 }
+            } = {}) {
+                this.name = name;
+                this.type = type;
+                this.level = level;
+                this.maxLevel = maxLevel;
+                this.description = description;
+                this.production = production;
+                this.buildcost = buildcost;
+                this.buildtime = buildtime;
+                this.cost = cost;
+                this.crew = crew;
+            }
+        }
+
+        const buildings = [
+            new Building({
+                name: "採石場",
+                type: "資源採集",
+                production: { stone: 10 },
+                buildcost: { wood: 100, stone: 50 },
+                cost: { energy: 5 },
+                crew: { worker: 1 }
+            }),
+            new Building({
+                name: "木材場",
+                type: "資源採集",
+                production: { wood: 20 },
+                buildcost: { wood: 50, stone: 25 },
+                cost: { energy: 2 },
+                crew: { worker: 1 }
+            }),
+            new Building({
+                name: "發電廠",
+                type: "資源加工",
+                production: { energy: 10 },
+                buildcost: { wood: 200, stone: 100 },
+                cost: { wood: 2 },
+                crew: { worker: 2 }
+            })
+        ];
+
+        const displayDiv = document.getElementById("display");
+
+        // 初始化建築選單
+        function initBuildingSelect() {
+            const buildingSelect = document.getElementById("building_select");
+            buildingSelect.innerHTML = ""; // 清空選單
+            buildings.forEach((building, index) => {
+                const option = document.createElement("option");
+                option.value = index;
+                option.textContent = building.name;
+                buildingSelect.appendChild(option);
+            });
+        }
+
+        // 顯示庫存
+        function showStorage() {
+            displayDiv.innerHTML = `工人數量: ${worker}<br>木材: ${wood}<br>石頭: ${stone}<br>能量: ${energy}<br>`;
+        }
+
+        // 建造建築物
+        function buildNew(buildIndex) {
+            const build = buildings[buildIndex];
+            if (worker >= build.crew.worker && wood >= build.buildcost.wood && stone >= build.buildcost.stone) {
+                worker -= build.crew.worker;
+                wood -= build.buildcost.wood;
+                stone -= build.buildcost.stone;
+                ownBuildings.push({ name: build.name, level: build.level });
+                displayDiv.innerHTML += `建造${build.name}成功!<br>`;
+            } else {
+                displayDiv.innerHTML += `建造失敗! 資源或條件不足<br>`;
+            }
+        }
+
+        // 升級建築物
+        function upgradeBuilding(buildIndex) {
+            const build = buildings[buildIndex];
+            const owned = ownBuildings.find(b => b.name === build.name);
+            if (owned && owned.level < build.maxLevel && wood >= build.buildcost.wood && stone >= build.buildcost.stone) {
+                wood -= build.buildcost.wood;
+                stone -= build.buildcost.stone;
+                worker -= build.crew.worker;
+                owned.level += 1;
+                displayDiv.innerHTML += `升級${build.name}成功! 現在等級為${owned.level}<br>`;
+            } else {
+                displayDiv.innerHTML += `升級失敗! 資源或條件不足<br>`;
+            }
+        }
+
+        // 拆除建築物
+        function destroyBuilding(buildIndex) {
+            const build = buildings[buildIndex];
+            const ownedIndex = ownBuildings.findIndex(b => b.name === build.name);
+            if (ownedIndex !== -1) {
+                const owned = ownBuildings[ownedIndex];
+                worker += build.crew.worker * owned.level;
+                wood += build.buildcost.wood * owned.level;
+                stone += build.buildcost.stone * owned.level;
+                ownBuildings.splice(ownedIndex, 1);
+                displayDiv.innerHTML += `拆除${build.name}成功!<br>`;
+            } else {
+                displayDiv.innerHTML += `拆除失敗! 沒有該建築物<br>`;
+            }
+        }
+
+        // 查詢建築物
+        function showBuildings() {
+            if (ownBuildings.length > 0) {
+                displayDiv.innerHTML = "擁有的建築物：<br>";
+                ownBuildings.forEach(building => {
+                    displayDiv.innerHTML += `建築物: ${building.name}, 等級: ${building.level}<br>`;
+                });
+            } else {
+                displayDiv.innerHTML = "目前沒有建築物<br>";
+            }
+        }
+
+        // 收穫資源
+        function runCircle() {
+            ownBuildings.forEach(owned => {
+                const build = buildings.find(b => b.name === owned.name);
+                for(cost in build.cost) {
+                    if (build.cost.hasOwnProperty(cost)) {
+                        if (window[cost] < build.cost[cost] * owned.level) {
+                            displayDiv.innerHTML += `收穫失敗! ${cost}不足<br>`;
+                            return;
+                        }
+                        window[cost] -= build.cost[cost] * owned.level;
+
+                    }
+                }
+                for (prod in build.production) {
+                    if (build.production.hasOwnProperty(prod)) {
+                        window[prod] += build.production[prod] * owned.level;
+                    }
+                }
+                displayDiv.innerHTML += `收穫成功! ${owned.name} 產出資源<br>`;
+            });
+        }
+
+        // 綁定按鈕事件
+        document.addEventListener("DOMContentLoaded", function () {
+            initBuildingSelect();
+            document.getElementById("btn_showStorage").addEventListener("click", showStorage);
+            document.getElementById("btn_build").addEventListener("click", function () {
+                const selectedBuilding = document.getElementById("building_select").value;
+                buildNew(parseInt(selectedBuilding));
+            });
+            document.getElementById("btn_upgrade").addEventListener("click", function () {
+                const selectedBuilding = document.getElementById("building_select").value;
+                upgradeBuilding(parseInt(selectedBuilding));
+            });
+            document.getElementById("btn_destroy").addEventListener("click", function () {
+                const selectedBuilding = document.getElementById("building_select").value;
+                destroyBuilding(parseInt(selectedBuilding));
+            });
+            document.getElementById("btn_showBuilding").addEventListener("click", showBuildings);
+            document.getElementById("btn_circle").addEventListener("click", runCircle);
+        });
+    </script>
+</body>
+</html>

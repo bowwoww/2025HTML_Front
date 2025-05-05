@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=<device-width>, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var payTypeDef = ['信用卡','Line Pay','現金','貨到付款','會員'];
+        var msg ="請輸入付款方式:";
+        for (let i=0;i<payTypeDef.length;i++){
+            msg = msg  + (i+1) + "為" + payTypeDef[i] + " ";
+        }
+        var payType = prompt(msg);
+
+        if(payTypeDef[payType-1] != undefined)
+            document.write(payTypeDef[payType-1]);
+        else
+            document.write("錯誤輸入");
+        document.write('<hr>');
+    </script>
+</body>
+</html>

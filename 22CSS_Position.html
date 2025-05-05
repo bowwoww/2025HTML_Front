@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #container {
+            width: 1400px;
+            height: 100%;
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header, footer {
+            width: 100%;
+        }
+        section {
+            display: flex;
+            flex-direction: row;
+            flex: 1;
+        }
+        nav {
+            width: 15%;
+        }
+        article {
+            width: 85%;
+        }
+        banner-left, banner-right {
+            position: fixed;
+            width: 15%;
+            height: 100%;
+            top: auto;
+        }
+        banner-left {
+            left: 0;
+        }
+        banner-right {
+            right: 0;
+        }
+        #cover-ad {
+            position: fixed;
+            top: 5%;
+            left: 5%;
+            width: 90%;
+            height: 90%;
+            z-index: 1;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            display: flex; 
+            justify-content: flex-end;
+            align-items: flex-start;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        #cover-ad img {
+            width: 100%;
+            height: 100%;
+        }
+        #cover-ad span {
+            background-color: #000;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        #cover-ad.hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>        
+    <banner-left id="banner-left">
+        <img src="image/banner1.jpg">
+    </banner-left>
+    <banner-right id="banner-right">
+        <img src="image/banner2.jpg">
+    </banner-right>
+    <div id="cover-ad">
+        <span>關閉廣告</span>
+        <img src="image/ad.jpg">
+    </div>
+    <div id="container">
+
+        <header>
+            <img src="image/top.jpg">
+        </header>
+        <section>
+            <nav>
+                <img src="image/left.jpg">
+            </nav>
+            <article>
+                <img src="image/right.jpg">
+            </article>
+        </section>
+        <footer>
+            <img src="image/bottom.jpg">
+        </footer>
+
+    </div>
+
+    <script>
+        document.querySelector('#cover-ad span').addEventListener('click', function() {
+            document.getElementById('cover-ad').classList.add('hidden');
+        });
+    </script>
+</body>
+</html>

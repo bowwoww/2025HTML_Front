@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="display"></div>
+    <script>
+        var strBase = "1234567890";
+        var strShow = "";
+        var i = 0; // 目前顯示的字元索引
+        var display = document.getElementById("display");
+
+        showString();
+
+        function showString(){
+            strShow += strBase[i]; // 取得目前索引的字元
+            i++; // 更新索引
+            if(i > strBase.length){ // 如果已經顯示完所有字元
+                return;
+            }
+            display.innerHTML = strBase.substring(0, i) + "<br>" + strShow; // 顯示目前的字串
+            setTimeout(showString, 1000); // 每秒顯示下一個字元
+        }
+    </script>
+
+
+</body>
+</html>

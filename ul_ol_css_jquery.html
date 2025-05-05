@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #container {
+            width: 500px;
+            position: relative;
+        }
+
+        #menu {
+            height: 50px;
+            top: 0;
+            left: 0;
+            position: absolute;
+            width: 200px;
+        }
+
+
+        #menu,
+        #menu ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            z-index: 10;
+        }
+
+        #menu li {
+            background-color: #477dff;
+            display:inline-block;
+        }
+
+        #menu a {
+            color: white;
+            text-decoration: none;
+            text-align:center;
+            padding: 10px;
+            display: block;
+            width: 200px;
+        }
+
+        #menu li ul {
+            width: 200px;
+            padding: 10px;
+            display: block;
+            opacity: 0; /* 初始透明度為 0 */
+            visibility: hidden; /* 隱藏子選單 */
+            transition: opacity 0.3s ease, visibility 0.3s ease; /* 添加漸變效果 */
+        }
+
+
+        #menu>li>ul>li {
+            background-color: white;
+
+        }
+        #menu>li>ul>li:hover {
+            background-color: #EEEEEE;
+
+        }
+        #menu>li>ul>li>a {
+            color: black;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="container">
+        <ul id="menu">
+            <li>
+                <a href="#">產品</a>
+                <ul class="submenu">
+                    <li><a href="#">ASP.net</a></li>
+                    <li><a href="#">jQuery</a></li>
+                    <li><a href="#">JavaScript</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#">服務</a>
+                <ul class="submenu">
+                    <li><a href="#">線上客服</a></li>
+                    <li><a href="#">檔案下載</a></li>
+                    <li><a href="#">資料查詢</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#">查詢</a>
+                <ul class="submenu">
+                    <li><a href="#">訂單查詢</a></li>
+                    <li><a href="#">歷史訂單</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const menuItems = document.querySelectorAll('#menu li ul');
+            menuItems.forEach(item => {
+                item.style.opacity = '0'; // 初始透明度
+                item.style.visibility = 'hidden'; // 初始不可見
+            });
+
+            const topMenuItems = document.querySelectorAll('#menu > li');
+            topMenuItems.forEach(menuItem => {
+                menuItem.addEventListener('mouseenter', function() {
+                    const submenu = this.querySelector('ul');
+                    if (submenu) {
+                        submenu.style.opacity = '1'; // 顯示子選單
+                        submenu.style.visibility = 'visible'; // 設為可見
+                    }
+                });
+                menuItem.addEventListener('mouseleave', function() {
+                    const submenu = this.querySelector('ul');
+                    if (submenu) {
+                        submenu.style.opacity = '0'; // 隱藏子選單
+                        submenu.style.visibility = 'hidden'; // 設為不可見
+                    }
+                });
+            });
+        });
+
+    </script>
+</body>
+</html>

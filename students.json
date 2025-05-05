@@ -1,0 +1,8 @@
+[
+    { "id": 1, "name": "John", "score": 50 },
+    { "id": 2, "name": "Jane", "score": 60 },
+    { "id": 3, "name": "Jim", "score": 70 },
+    { "id": 4, "name": "Jack", "score": 80 },
+    { "id": 5, "name": "Jill", "score": 90 }
+]
+
