@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var n = 10; // 設定要計算的項數
+
+        function fansui(n) {
+            if (n == 1 || n == 2) { // 如果項數是1或2，返回1
+                return 1;
+            } else {
+                return fansui(n - 1) + fansui(n - 2); // 否則返回前兩項的和
+            }
+        }
+
+        console.log("費式數列的第" + n + "項是: " + fansui(n)); // 顯示第n項的值
+    </script>
+</body>
+</html>
