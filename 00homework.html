@@ -4,99 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <style>
-        :root {
-            --vol-thumb-width: 15px;
-            --vol-thumb-height: 19px;
-            --vol-thumb-background-color: black;
-            --vol-thumb-border-radius: 20%;
-            --vol-thumb-border: 1px solid white;
-            --thumb-hover-color: red;
-        }
-
-        span{
-            cursor: pointer;
-            font-size: 20px;
-            font-style: bold;
-            user-select: none;
-        }
-
-        #controller{
-            width: 800px;
-            height: 100px;
-            margin: auto;
-            border: 4px solid black;
-            padding: 20px;
-            border-radius: 5px;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            align-items: center;
-        }
-        .btnIcon{
-            font-family: webdings;
-            font-size: 2rem;
-            user-select: none;
-            border: 1px solid black;
-            box-shadow: 3px 3px 7px black;
-        }
-        .selected{
-            color: red;
-        }
-
-        #timeController>span{
-            cursor: pointer;
-            font-size: 20px;
-            font-style: bold;
-            box-shadow: 1px 1px 3px black;
-            background-color: aqua;
-            border: 1px solid black;
-            padding: 3px;
-            border-radius: 50%;
-        }
-         input[type="range"]{
-            appearance: none;
-            border: 3px solid #ccc;
-            height: 10px;
-            width: 400px;
-        }
-        input[type="range"]::-webkit-slider-thumb{        
-            appearance: none;       
-            width: var(--vol-thumb-width);
-            height: var(--vol-thumb-height);
-            background-color: var(--vol-thumb-background-color);
-            border-radius: var(--vol-thumb-border-radius);
-            border: var(--vol-thumb-border);
-        }
-        input[type="range"].active::-webkit-slider-thumb{
-            background-color: red;
-        }
-        input[type="range"].active::-moz-range-thumb{
-            background-color: red;
-        }
-
-        input[type="range"]::-moz-range-thumb{
-            appearance: none;
-            width: var(--vol-thumb-width);
-            height: var(--vol-thumb-height);
-            background-color: var(--vol-thumb-background-color);
-            border-radius: var(--vol-thumb-border-radius);
-            border: var(--vol-thumb-border);
-        } 
-
-        #selectMusic{
-            width: 200px;
-            height: 30px;
-            font-size: 20px;
-            font-style: bold;
-            border-radius: 5px;
-            border: 1px solid black;
-            background-color: lightskyblue;
-        }
-    </style>
+    <link rel="stylesheet" href="css/audio.css">
 </head>
 <body>
-    <audio id="musicPlayer" src="" controls></audio>
+    <audio id="musicPlayer" src="" ></audio>
     <div id="controller">
         <div id="playController">
             <span  id="btn_playMusic" class="btnIcon">4</span>
@@ -117,7 +28,7 @@
             </div> 
         </div>
         <div id="selectController">
-            <select name="選擇歌曲" id="selectMusic">
+            <select title="Music Select" id="selectMusic">
             </select>
             <span id="btn_NextMusic">下一首</span>
             <span id="btn_PreMusic">上一首</span>
@@ -125,233 +36,22 @@
             <label for="btn_LoopMusic">循環播放</label>
             <input type="checkbox" id="btn_LoopMusic"/>
 
-            <select name="選擇循環" id="selectLoopType" disabled>
+            <select title="LoopType" id="selectLoopType" disabled>
                 <option value="one">單曲循環</option>
                 <option value="all">全部循環</option>
                 <option value="random">隨機循環</option>
             </select>
-            <div id="infoPanel">
-
-            </div>
-            <div id="footer">
-                
-            </div>
+        </div>
+        <div id="infoPanel">
+            <div class="hidden"></div>
+        </div>
+        <div id="footer">
+            
         </div>
     </div>
     
 
 
-    <script>
-        var player = document.getElementById("musicPlayer");
-        var currentVolume = 0.5; // 預設音量
-        var musicList = ["airball.mp3","elysees.mp3","moon.mp3","nothing.mp3","rain.mp3","travel.mp3"]; // 音樂列表
-        var musicIndex = 0; // 當前音樂索引
-        var musicSpeed = false; // 音樂速度
-        var loopType = "none"; // 循環播放類型
-        var endMusic = false; // 音樂結束標誌
-        var playing = false; // 音樂播放狀態
-
-        document.addEventListener("DOMContentLoaded", function () {
-            initEventListeners(); // 初始化事件監聽器
-
-        });
-        function playMusic(){
-            if (!playing && !endMusic) { // 如果音樂暫停且沒有結束
-                player.play(); // 播放音樂
-                event.target.innerHTML = ";"; // 更新按鈕文字
-            } else {
-                player.pause(); // 暫停音樂
-                event.target.innerHTML = "4"; // 更新按鈕文字
-            }
-            playing = !playing; // 切換播放狀態
-        }
-        function stopMusic() {
-            player.currentTime = 0; // 重置播放時間到開頭
-            if(playing || endMusic){ // 如果音樂正在播放或結束
-                event.target.previousElementSibling.click(); // 觸發播放按鈕的點擊事件
-            }
-            endMusic = false; // 重置音樂結束標誌
-            fillRangeColor(document.getElementById("bar_currentTime"), 0); // 更新進度條顏色
-        }
-
-        function setVolume() {
-            player.volume = event.target.value; // 設定音量
-            event.target.nextElementSibling.innerHTML = Math.round(event.target.value * 100); // 更新音量顯示
-            currentVolume = event.target.value; // 儲存當前音量
-            if(player.muted){
-                document.getElementById("btn_mute").click(); // 取消靜音)
-            } else {
-                fillRangeColor(event.target, event.target.value * 100); // 更新進度條顏色
-            }
-        }
-
-        function muteMusic() {
-            var bar_volume = document.getElementById("bar_volume");
-            if (player.muted) {
-                player.muted = false; // 取消靜音
-                event.target.innerHTML = "V";
-                bar_volume.value = currentVolume; // 恢復音量
-            } else {
-                player.muted = true; // 開啟靜音
-                event.target.innerHTML = "U";
-                currentVolume = document.getElementById("bar_volume").value; // 儲存當前音量
-                bar_volume.value = 0; // 設定音量為0
-            }
-            fillRangeColor(bar_volume, bar_volume.value * 100); // 更新音量進度條顏色
-        }
-
-        function setMusicList() {
-            var selectMusic = document.getElementById("selectMusic");
-   
-            for (var i = 0; i < musicList.length; i++) {
-                var option = document.createElement("option");
-                option.value = i;
-                option.textContent = "歌曲 " + (i + 1) + ": " + musicList[i]; // 顯示的文字
-                selectMusic.appendChild(option);
-            }
-            player.src = "music\\" + musicList[0]; // 設定音樂檔案的路徑
-        }
-
-        function setMaxTime() {
-            var bar_currentTime = document.getElementById("bar_currentTime");
-            bar_currentTime.max = player.duration; // 設定進度條的最大值為音樂的總長度
-            updateTimeLabel(bar_currentTime); // 更新當前時間顯示
-            if(playing){
-                player.play(); // 播放音樂
-            }
-        }
-        function setCurrentTime() {
-            player.currentTime = event.target.value; // 設定音樂的當前播放時間為進度條的當前值
-            //updateTimeLabel(event.target); // 更新當前時間顯示
-        }
-        function increaseTime(num) {
-            if(player.currentTime + num > player.duration){ // 如果增加的時間超過音樂的總長度
-                player.currentTime = player.duration; // 設定當前播放時間為音樂的總長度
-            }else {
-            player.currentTime += num; // 增加音樂的當前播放時間
-            }   
-            event.target.parentNode.firstElementChild.value = player.currentTime; // 更新進度條的當前值
-        }
-
-        function updateCurrentTime() {
-            var bar_currentTime = document.getElementById("bar_currentTime");
-            bar_currentTime.value = player.currentTime; // 更新進度條的當前值為音樂的當前播放時間
-            updateTimeLabel(bar_currentTime); // 更新當前時間顯示
-            fillRangeColor(bar_currentTime, (player.currentTime / player.duration) * 100); // 更新進度條顏色
-        }
-
-        function updateTimeLabel(labelTime) {
-            labelTime.nextElementSibling.innerHTML = convertTime(player.currentTime) + " / " + convertTime(player.duration); // 更新當前時間顯示
-        }
-
-        function convertTime(number) {
-            var minutes = Math.floor(number / 60); // 計算分鐘數
-            var seconds = Math.floor(number % 60); // 計算秒數
-            return (minutes < 10 ? "0" : "") + minutes + ":" + (seconds < 10 ? "0" : "") + seconds; // 返回格式化的時間字串
-        }
-        function fillRangeColor(range, percent) {
-            var color = "linear-gradient(to right, rgb(0,150,0) 1%,rgb(150,150,0),rgb(255, 255, 255) " + percent + "%)"; // 設定顏色
-            range.style.backgroundImage = color; // 更新進度條顏色
-        }
-
-        function changeMusic(i){
-            if(event.target.id === "selectMusic"){
-                musicIndex = parseInt(this.value); // 更新音樂索引
-            }else{
-                musicIndex = (musicIndex + i +musicList.length) % musicList.length; // 更新音樂索引
-                document.getElementById("selectMusic").value = musicIndex; // 更新下拉選單的值
-            }
-            player.src = "music\\" + musicList[musicIndex]; // 設定音樂檔案的路徑    
-            if(!playing){ // 如果音樂沒有播放
-                document.getElementById("btn_stopMusic").click(); // 停止音樂 
-            }
-        }
-
-
-        function increaseSpeed() {
-            if (musicSpeed) {
-                player.playbackRate = 1; // 恢復正常速度
-                musicSpeed = false; // 設定為正常速度
-                event.target.className = ""; // 更新按鈕樣式
-            } else {
-                player.playbackRate = 2; // 設定為兩倍速度
-                musicSpeed = true; // 設定為加速播放
-                event.target.className = "selected"; // 更新按鈕樣式
-            }
-        }
-
-        function changeLoop() {
-            loopType = event.target.checked ? event.target.nextElementSibling.value : "none"; // 更新循環播放類型
-            event.target.nextElementSibling.disabled = !event.target.checked; // 啟用或禁用循環播放選項
-
-        }
-        function changeLoopType() {
-            loopType = event.target.value; // 更新循環播放類型
-        }
-
-        function changeLoopMusic() {
-            if (loopType === "none"){
-                endMusic = true; // 設定音樂結束標誌為true
-                document.getElementById("btn_stopMusic").click(); // 停止音樂   
-                return;
-            } // 如果沒有選擇循環播放則不執行任何操作
-            if(loopType === "one"){
-                player.currentTime = 0; // 重置播放時間到開頭
-            }else if(loopType === "all"){
-                changeMusic(1); // 播放下一首音樂
-            }else if(loopType === "random"){
-                changeMusic(Math.floor(Math.random() * musicList.length)); // 隨機播放音樂
-            }
-            player.play(); // 播放音樂
-        }
-
-        function initEventListeners(){
-            document.getElementById("controller").addEventListener("click", function (event) {
-            switch (event.target.id) {
-                case "btn_playMusic":
-                    playMusic();
-                    break;
-                case "btn_stopMusic":
-                    stopMusic();
-                    break;
-                case "btn_mute":
-                    muteMusic();
-                    break;
-                case "btn_NextMusic":
-                    changeMusic(1);
-                    break;
-                case "btn_PreMusic":
-                    changeMusic(-1);
-                    break;
-                case "btn_IncreaseSpeed":
-                    increaseSpeed(); // 增加播放速度
-                    break;
-                default:
-                    break;
-            }
-        });
-        document.getElementById("selectMusic").addEventListener("change",changeMusic);// 當選擇歌曲改變時更新音樂檔案的路徑
-        document.getElementById("bar_currentTime").addEventListener("input", setCurrentTime); // 當進度條改變時更新音樂的當前播放時間
-        document.getElementById("bar_volume").addEventListener("input", setVolume); // 當音量改變時更新音量
-        document.getElementById("btn_LoopMusic").addEventListener("change", changeLoop); // 當循環播放選項改變時更新音樂循環播放
-        document.getElementById("selectLoopType").addEventListener("change", changeLoopType); // 當循環播放類型改變時更新音樂循環播放類型
-        
-        player.addEventListener("loadedmetadata", setMaxTime); // 當音樂檔案加載完成後設定最大值及更新當前時間顯示並決定是否撥放
-        player.addEventListener("timeupdate", updateCurrentTime); // 當音樂播放時更新進度條
-        player.addEventListener("ended", changeLoopMusic); // 當音樂結束時根據循環播放類型更新音樂
-        setMusicList(); // 設定音樂列表
-        fillRangeColor(document.getElementById("bar_volume"), currentVolume*100); // 更新進度條顏色
-
-        document.querySelectorAll("input[type='range']").forEach(function (range) {
-            range.addEventListener("mousedown",function () {
-                range.classList.add("active"); // 當按下進度條時添加樣式
-            })
-            range.addEventListener("mouseup",function () {
-                range.classList.remove("active"); // 當放開進度條時移除樣式
-            });
-        })
-    }
-
-    </script>
+    <script src="js/audio.js"></script>
 </body>
 </html>
