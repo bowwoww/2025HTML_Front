@@ -115,7 +115,7 @@ function fillRangeColor(range, percent) {
     range.style.backgroundImage = color; // 更新進度條顏色
 }
 
-function changeMusic(i,event){
+function changeMusic(event,i){
     if(event.target.id === "selectMusic"){
         musicIndex = parseInt(this.value); // 更新音樂索引
     }else{
@@ -181,10 +181,10 @@ function initEventListeners(){
             muteMusic(event);
             break;
         case "btn_NextMusic":
-            changeMusic(1,event);
+            changeMusic(event,1);
             break;
         case "btn_PreMusic":
-            changeMusic(-1,event);
+            changeMusic(event,-1);
             break;
         case "btn_IncreaseSpeed":
             increaseSpeed(event); // 增加播放速度
