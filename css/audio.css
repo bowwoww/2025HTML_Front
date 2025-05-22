@@ -39,7 +39,7 @@ span{
 #timeController>span{
     cursor: pointer;
     font-size: 20px;
-    font-style: bold;
+    font-weight: bold;
     box-shadow: 1px 1px 3px black;
     background-color: aqua;
     border: 1px solid black;

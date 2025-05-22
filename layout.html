@@ -32,11 +32,28 @@
             clear: both;
             height: 100px;
         }
+        @media screen and (max-width: 600px) {
+            #container {
+                flex-direction: column;
+            }
+            #container header {
+                font-size: 0.5rem;
+            }
+            #container main {
+                width: 100%;
+            }
+            #container nav {
+                display: none;
+            }
+            
+        }
     </style>
 </head>
 <body>
     <div id="container">
-        <header>a</header>
+        <header>
+            <h1> 這是標題</h1>
+        </header>
         <nav>b</nav>
         <main>c</main>
         <footer>d</footer>
