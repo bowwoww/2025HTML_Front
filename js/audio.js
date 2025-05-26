@@ -81,15 +81,16 @@ function setMaxTime() {
 }
 function setCurrentTime(event) {
     player.currentTime = event.target.value; // 設定音樂的當前播放時間為進度條的當前值
-    //updateTimeLabel(event.target); // 更新當前時間顯示 (指令重複 已由updateCurrentTime函數處理)
+    //updateTimeLabel(event.target); // 更新當前時間顯示 (此行多餘 已由updateCurrentTime函數處理)
 }
 function increaseTime(num,event) {
     if(player.currentTime + num > player.duration){ // 如果增加的時間超過音樂的總長度
         player.currentTime = player.duration; // 設定當前播放時間為音樂的總長度
     }else {
     player.currentTime += num; // 增加音樂的當前播放時間
-    }   
-    event.target.parentNode.firstElementChild.value = player.currentTime; // 更新進度條的當前值
+    } 
+    //已自動根據時間變動更新  此行多餘
+    //event.target.parentNode.firstElementChild.value = player.currentTime; // 更新進度條的當前值
 }
 
 function updateCurrentTime() {
@@ -115,7 +116,7 @@ function fillRangeColor(range, percent) {
     range.style.backgroundImage = color; // 更新進度條顏色
 }
 
-function changeMusic(event,i){
+function changeMusic(event){
     if(event.target.id === "selectMusic"){
         musicIndex = parseInt(this.value); // 更新音樂索引
         changeMusicByNumber(0); // 直接播放選擇的音樂

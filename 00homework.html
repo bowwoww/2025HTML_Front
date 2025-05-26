@@ -9,6 +9,9 @@
 <body>
     <audio id="musicPlayer" src="" ></audio>
     <div id="controller">
+        <div id="logo">
+            <img src="image/logo.png" alt="logo" />
+        </div>
         <div id="playController">
             <span  id="btn_playMusic" class="btnIcon">4</span>
             <span id="btn_stopMusic" class="btnIcon">&lt;</span>
@@ -18,8 +21,8 @@
             <div id="timeController">
                 <input type="range" name="進度" id="bar_currentTime" min="0" step="1" value="0"/>
                 <label for="bar_currentTime">0</label>
-                <span onclick="increaseTime(10)">快轉</span>
-                <span onclick="increaseTime(-10)">倒帶</span>
+                <span onclick="increaseTime(10,event)">快轉</span>
+                <span onclick="increaseTime(-10,event)">倒帶</span>
                 <span id="btn_IncreaseSpeed">兩倍速</span>
             </div>
             <div id="volumeController">
