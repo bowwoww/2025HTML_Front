@@ -118,10 +118,22 @@ function fillRangeColor(range, percent) {
 function changeMusic(event,i){
     if(event.target.id === "selectMusic"){
         musicIndex = parseInt(this.value); // 更新音樂索引
-    }else{
-        musicIndex = (musicIndex + i +musicList.length) % musicList.length; // 更新音樂索引
-        document.getElementById("selectMusic").value = musicIndex; // 更新下拉選單的值
+        changeMusicByNumber(0); // 直接播放選擇的音樂
+    }else if(event.target.id === "btn_NextMusic"){
+        changeMusicByNumber(1); // 播放下一首音樂
+    }else if(event.target.id === "btn_PreMusic"){
+        changeMusicByNumber(-1); // 播放上一首音樂
     }
+
+
+
+}
+
+function changeMusicByNumber(i) {
+
+    musicIndex = (musicIndex + i +musicList.length) % musicList.length; // 更新音樂索引
+    document.getElementById("selectMusic").value = musicIndex; // 更新下拉選單的值
+
     player.src = "music\\" + musicList[musicIndex]; // 設定音樂檔案的路徑    
     if(!playing){ // 如果音樂沒有播放
         document.getElementById("btn_stopMusic").click(); // 停止音樂 
@@ -160,9 +172,9 @@ function changeLoopMusic() {
     if(loopType === "one"){
         player.currentTime = 0; // 重置播放時間到開頭
     }else if(loopType === "all"){
-        changeMusic(1); // 播放下一首音樂
+        changeMusicByNumber(1); // 播放下一首音樂
     }else if(loopType === "random"){
-        changeMusic(Math.floor(Math.random() * musicList.length)); // 隨機播放音樂
+        changeMusicByNumber(Math.floor(Math.random() * musicList.length)); // 隨機播放音樂
     }
     player.play(); // 播放音樂
 }
@@ -181,10 +193,8 @@ function initEventListeners(){
             muteMusic(event);
             break;
         case "btn_NextMusic":
-            changeMusic(event,1);
-            break;
         case "btn_PreMusic":
-            changeMusic(event,-1);
+            changeMusic(event);
             break;
         case "btn_IncreaseSpeed":
             increaseSpeed(event); // 增加播放速度
