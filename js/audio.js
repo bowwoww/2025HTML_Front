@@ -1,4 +1,5 @@
 var player = document.getElementById("musicPlayer");
+var logo = document.getElementById("logo").firstElementChild; // 音樂播放器的logo
 var currentVolume = 0.5; // 預設音量
 var musicList = ["airball.mp3","elysees.mp3","moon.mp3","nothing.mp3","rain.mp3","travel.mp3"]; // 音樂列表
 var musicIndex = 0; // 當前音樂索引
@@ -56,6 +57,8 @@ function muteMusic(event) {
         bar_volume.value = 0; // 設定音量為0
     }
     fillRangeColor(bar_volume, bar_volume.value * 100); // 更新音量進度條顏色
+            document.getElementById("volumeController").children[1].innerHTML = Math.round(bar_volume.value * 100); // 更新音量顯示
+
 }
 
 function setMusicList() {
@@ -98,6 +101,7 @@ function updateCurrentTime() {
     bar_currentTime.value = player.currentTime; // 更新進度條的當前值為音樂的當前播放時間
     updateTimeLabel(bar_currentTime); // 更新當前時間顯示
     fillRangeColor(bar_currentTime, (player.currentTime / player.duration) * 100); // 更新進度條顏色
+    logo.style.transform = "rotate(" + (player.currentTime / player.duration * 360) + "deg)"; // 更新logo的旋轉角度
 }
 
 // 更新當前時間顯示的函數
@@ -117,6 +121,8 @@ function fillRangeColor(range, percent) {
 }
 
 function changeMusic(event){
+    //恢復logo的旋轉角度
+    logo.style.transform = "rotate(0deg)";
     if(event.target.id === "selectMusic"){
         musicIndex = parseInt(this.value); // 更新音樂索引
         changeMusicByNumber(0); // 直接播放選擇的音樂

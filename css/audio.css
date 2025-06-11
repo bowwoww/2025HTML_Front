@@ -38,8 +38,12 @@ span{
     font-size: 2rem;
     border: 1px solid black;
     box-shadow: 3px 3px 7px black;
+    border-radius: 50%;
 }
 
+#playController{
+    padding-bottom: 10px;
+}
 
 #timeController>span{
     cursor: pointer;
