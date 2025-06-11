@@ -57,7 +57,7 @@ function muteMusic(event) {
         bar_volume.value = 0; // 設定音量為0
     }
     fillRangeColor(bar_volume, bar_volume.value * 100); // 更新音量進度條顏色
-            document.getElementById("volumeController").children[1].innerHTML = Math.round(bar_volume.value * 100); // 更新音量顯示
+    document.getElementById("volumeController").children[1].innerHTML = Math.round(bar_volume.value * 100); // 更新音量顯示
 
 }
 
