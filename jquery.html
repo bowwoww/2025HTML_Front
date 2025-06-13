@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        //API https://data.moa.gov.tw/Service/OpenData/FromM/PesticideData.aspx
+        $(document).ready(function() {
+            $.ajax({
+                url: "https://data.moa.gov.tw/Service/OpenData/FromM/PesticideData.aspx",
+                method: "GET",
+                dataType: "json",
+                success: function(data) {
+                    createTable(data);
+                },
+                error: function(error) {
+                    console.error("Error fetching data:", error);
+                }
+            });
+        });
+
+        //建立table顯示資料 建立分頁 每頁最多顯示30筆
+        function createTable(data) {
+            let currentPage = 1;
+            const rowsPerPage = 30;
+
+            function displayPage(page) {
+                $("body").empty();
+                let table = $("<table></table>");
+                let header = $("<tr></tr>");
+                header.append("<th>中文名稱</th>");
+                header.append("<th>廠牌名稱</th>");
+                header.append("<th>廠商名稱</th>");
+                table.append(header);
+
+                const start = (page - 1) * rowsPerPage;
+                const end = start + rowsPerPage;
+                const pageData = data.slice(start, end);
+
+                pageData.forEach(item => {
+                    let row = $("<tr></tr>");
+                    row.append(`<td>${item.中文名稱}</td>`);
+                    row.append(`<td>${item.廠牌名稱}</td>`);
+                    row.append(`<td>${item.廠商名稱}</td>`);
+                    table.append(row);
+                });
+
+                $("body").append(table);
+            }
+
+            displayPage(currentPage);
+
+            // 分頁按鈕
+            let pagination = $("<div class='pagination'></div>");
+            let totalPages = Math.ceil(data.length / rowsPerPage);
+            for (let i = 1; i <= totalPages; i++) {
+                let button = $(`<button>${i}</button>`);
+                button.on("click", function() {
+                    currentPage = i;
+                    displayPage(currentPage);
+                });
+                pagination.append(button);
+            }
+            $("body").append(pagination);
+        }
+    </script>
+</body>
+</html>
