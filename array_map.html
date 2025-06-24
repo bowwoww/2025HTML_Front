@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <script>
+        const arr1 = [1, 2, 3, 4, 5];
+        const arr2 = [...arr1, 6, 7, 8, 9, 10];
+
+        const arr3 = arr2.map((item,index) => {
+            return item * index; // 將每個元素乘以index
+        });
+        const arr4 = arr2.filter((item) => {
+            return item % 2 === 0; // 選取偶數
+        });
+        
+        arr4.forEach((item, index) => {
+            console.log(`Index: ${index}, Value: ${item}`);
+        });
+        arr3.forEach((item, index) => {
+            console.log(`Transformed Index: ${index}, Value: ${item}`);
+        });
+    </script>
+</body>
+</html>
