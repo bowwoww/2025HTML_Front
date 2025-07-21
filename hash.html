@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>自製 Hash Table 搜尋範例</h2>
+    <input type="text" id="inputKey" placeholder="輸入要查詢的 key">
+    <button onclick="searchHash()">查詢</button>
+    <div id="result"></div>
+    <hr>
+    <h2>自訂 hash 密碼儲存與驗證範例</h2>
+    <input type="text" id="regUser" placeholder="註冊帳號">
+    <input type="password" id="regPwd" placeholder="註冊密碼">
+    <button onclick="register()">註冊</button>
+    <br>
+    <input type="text" id="loginUser" placeholder="登入帳號">
+    <input type="password" id="loginPwd" placeholder="登入密碼">
+    <button onclick="login()">登入</button>
+    <div id="loginResult"></div>
+    <script>
+        // 簡單字串 hash function（將每個字元的 charCode 相加再取餘數）
+        function simpleHash(str, size) {
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                hash += str.charCodeAt(i);
+            }
+            return hash % size;
+        }
+
+        // 建立一個雜湊表（陣列，每格可放多個元素）
+        const TABLE_SIZE = 10;
+        let hashTable = Array.from({length: TABLE_SIZE}, () => []);
+
+        // 插入資料到雜湊表
+        function insert(key, value) {
+            const idx = simpleHash(key, TABLE_SIZE);
+            hashTable[idx].push({key, value});
+        }
+
+        // 搜尋資料
+        function find(key) {
+            const idx = simpleHash(key, TABLE_SIZE);
+            for (let item of hashTable[idx]) {
+                if (item.key === key) return item.value;
+            }
+            return null;
+        }
+
+        // 範例資料
+        insert('apple', '蘋果');
+        insert('banana', '香蕉');
+        insert('cat', '貓');
+        insert('dog', '狗');
+        insert('grape', '葡萄');
+        insert('car', '汽車');
+
+        // 查詢按鈕事件
+        function searchHash() {
+            const key = document.getElementById('inputKey').value;
+            const value = find(key);
+            document.getElementById('result').innerText = value ? `查到：${value}` : '查無資料';
+        }
+
+        // ====== 自訂 hash function for 密碼 ======
+        function myPasswordHash(pwd) {
+            let hash = 5381;
+            for (let i = 0; i < pwd.length; i++) {
+                hash = ((hash << 5) + hash) + pwd.charCodeAt(i); // hash * 33 + char
+            }
+            return hash.toString(16); // 轉成 16 進位字串
+        }
+
+        // 模擬帳號密碼資料庫
+        let userDB = {};
+
+        // 註冊
+        function register() {
+            const user = document.getElementById('regUser').value;
+            const pwd = document.getElementById('regPwd').value;
+            if (!user || !pwd) {
+                alert('請輸入帳號和密碼');
+                return;
+            }
+            userDB[user] = myPasswordHash(pwd);
+            alert('註冊成功！');
+        }
+
+        // 登入
+        function login() {
+            const user = document.getElementById('loginUser').value;
+            const pwd = document.getElementById('loginPwd').value;
+            const hash = myPasswordHash(pwd);
+            if (userDB[user] && userDB[user] === hash) {
+                document.getElementById('loginResult').innerText = '登入成功！';
+            } else if (userDB[user] == undefined) {
+                document.getElementById('loginResult').innerText = '帳號不存在';
+            } else {
+                document.getElementById('loginResult').innerText = '密碼錯誤';
+            }
+        }
+    </script>
+</body>
+</html>
